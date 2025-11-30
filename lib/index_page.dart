@@ -23,7 +23,11 @@ class _IndexPageState extends State<IndexPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_gettitle(_bottomNavbar)),
+        centerTitle: true,
+        title: Text(
+          _gettitle(_bottomNavbar),
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: Color.fromARGB(255, 34, 59, 102),
       ),
       body: IndexedStack(index: _bottomNavbar, children: _pages),
@@ -57,13 +61,13 @@ class _IndexPageState extends State<IndexPage> {
   String _gettitle(int index) {
     switch (index) {
       case 0:
-        return 'الصفحة الرئيسية';
+        return 'HomePage';
       case 1:
-        return 'صفحة البحث';
+        return 'SearchPage';
       case 2:
-        return 'صفحة الاعدادات';
+        return 'SettingPage';
       case 3:
-        return 'صفحة الحساب';
+        return 'AccountPage';
       default:
         return 'data';
     }
