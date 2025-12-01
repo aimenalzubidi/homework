@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tasks/secand_page.dart';
-import 'package:tasks/thaerd_page.dart';
+import 'package:homework/secand_page.dart';
+import 'package:homework/thaerd_page.dart';
+
 
 class Textfild extends StatefulWidget {
   const Textfild({super.key});
