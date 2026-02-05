@@ -16,7 +16,7 @@ class SqlDb {
   // here we init the database and creat the tables
   initalDb() async{
     String databasepath = await getDatabasesPath();
-    String path = join(databasepath, 'mazdb.db');
+    String path = join(databasepath, 'aimen.db');
     Database mydb = await openDatabase(path, onCreate: _onCreate, version:2, onUpgrade:_onUpgrade);
     return mydb;
 

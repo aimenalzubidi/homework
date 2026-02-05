@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tasks/db_helper.dart';
-import 'package:tasks/sql_db.dart';
 
 import 'package:flutter/material.dart';
 
