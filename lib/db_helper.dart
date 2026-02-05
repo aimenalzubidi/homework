@@ -1,58 +1,78 @@
+// يجب حفظ هذا الملف لإنشاء اي قاعدة بيانات
+
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'user_model.dart';
-
-class DBHelper {
-  static final DBHelper instance = DBHelper._init();
-  static Database? _database;
-
-  DBHelper._init();
-
-  Future<Database> get database async {
-    if (_database != null) return _database!;
-    _database = await _initDB('users.db');
-    return _database!;
+class SqlDb {
+  // this is made to not make init again and again
+  static Database? _db;
+  Future<Database?> get db async{
+    if (_db ==null){
+      _db = await initalDb();
+      return _db;
+    }else{
+      return _db;
+    }
   }
+  // here we init the database and creat the tables
+  initalDb() async{
+    String databasepath = await getDatabasesPath();
+    String path = join(databasepath, 'mazdb.db');
+    Database mydb = await openDatabase(path, onCreate: _onCreate, version:2, onUpgrade:_onUpgrade);
+    return mydb;
 
-  Future<Database> _initDB(String fileName) async {
-    final dbPath = await getDatabasesPath();
-    final path = join(dbPath, fileName);
-
-    return await openDatabase(
-      path,
-      version: 1,
-      onCreate: _createDB,
-    );
   }
-  Future<int> deleteUser(int id) async {
-  final db = await database;
-  return await db.delete(
-    'users',
-    where: 'id = ?',
-    whereArgs: [id],
-  );
-}
-
-
-  Future _createDB(Database db, int version) async {
+  _onUpgrade(Database db, int oldversion, int newversion)async{
     await db.execute('''
-      CREATE TABLE users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT,
-        phone TEXT,
-        email TEXT
-      )
-    ''');
+        CREATE TABLE "products"(
+        "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        "pro_name" TEXT NOT NULL,
+        "pro_type" TEXT NOT NULL,
+        "pro_desc" TEXT NOT NULL
+        )
+        ''');
+
+    print("onUpgrae =========================");
+  }
+  _onCreate(Database db, int version) async{
+    await db.execute('''
+        CREATE TABLE "notes"(
+        "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        "note" TEXT NOT NULL
+        )
+        ''');
+    await db.execute('''
+        CREATE TABLE "users"(
+        "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        "user_name" TEXT NOT NULL,
+        "user_password" TEXT NOT NULL
+        )
+        ''');
+    print("======onCreat database and tables ================");
   }
 
-  Future<int> insertUser(UserModel user) async {
-    final db = await database;
-    return await db.insert('users', user.toMap());
-  }
 
-  Future<List<UserModel>> getUsers() async {
-    final db = await database;
-    final result = await db.query('users');
-    return result.map((e) => UserModel.fromMap(e)).toList();
+// SELECT
+  readData(String sql) async{
+    Database? mydb = await db;
+    List<Map> response = await mydb!.rawQuery(sql);
+    return response;
+  }
+// INSERT
+  insertData(String sql) async{
+    Database? mydb = await db;
+    int response = await mydb!.rawInsert(sql);
+    return response;
+  }
+// UPDATE
+  updateData(String sql) async{
+    Database? mydb = await db;
+    int response = await mydb!.rawUpdate(sql);
+    return response;
+  }
+// DELETE
+  deleteData(String sql) async{
+    Database? mydb = await db;
+    int response = await mydb!.rawDelete(sql);
+    return response;
   }
 }
