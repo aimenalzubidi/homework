@@ -1,4 +1,4 @@
-  import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 class DisplayScreen extends StatelessWidget {
   final List<Product> products;
@@ -12,6 +12,8 @@ class DisplayScreen extends StatelessWidget {
         backgroundColor: const Color.fromARGB(255, 16, 146, 83),
         centerTitle: true,
         title: Text('قائمة المنتجات'),
+
+        
       ),
       body: SingleChildScrollView(
         child: Center(
