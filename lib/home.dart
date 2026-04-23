@@ -18,7 +18,7 @@ class HomeScreen extends StatelessWidget {
           icon: Icon(Icons.upload_file),
           label: Text('اختر ملف المنتج'),
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blue,
+            backgroundColor: const Color.fromARGB(255, 16, 146, 83),
             foregroundColor: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
@@ -31,7 +31,7 @@ class HomeScreen extends StatelessWidget {
   }
 
   Future<void> _pickAndParseExcel(BuildContext context) async {
-    // 1. اختيار الملف
+   
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['xlsx'],
@@ -42,12 +42,11 @@ class HomeScreen extends StatelessWidget {
       var excel = Excel.decodeBytes(bytes);
       List<Product> products = [];
 
-      // 2. قراءة البيانات (نفترض أنها في الورقة الأولى)
-      for (var table in excel.tables.keys) {
-        // نتخطى السطر الأول لأنه عادة يكون "العنوان"
-        var rows = excel.tables[table]!.rows;
-        for (int i = 1; i < rows.length; i++) {
-          var row = rows[i];
+      var table = excel.tables[excel.tables.keys.first];
+
+      if (table != null) {
+        for (int i = 0; i < table.maxRows; i++) {
+          var row = table.rows[i];
           products.add(
             Product(
               name: row[0]?.value.toString() ?? '',
